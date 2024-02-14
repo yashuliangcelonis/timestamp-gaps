@@ -11,7 +11,6 @@
 #     return app.send_static_file("index.html")
 from datetime import datetime
 
-
 old_time = datetime(1970, 1, 1)
 
 with open('after.txt', 'r') as file:
