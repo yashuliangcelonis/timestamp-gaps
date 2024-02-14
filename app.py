@@ -14,7 +14,7 @@ from datetime import datetime
 
 old_time = datetime(1970, 1, 1)
 
-with open('0_sonarcloud.txt', 'r') as file:
+with open('after.txt', 'r') as file:
    
     for line in file:
         # Strip the newline character from the line
