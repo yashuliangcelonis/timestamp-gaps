@@ -1,8 +1,8 @@
 from datetime import date
-from sonar_util import calculate_dates, get_cache_hit, get_workflow_runs, filter_workflow_runs_by_name
+from sonar_util import calculate_dates, get_cache_hit_and_total_time, get_workflow_runs, filter_workflow_runs_by_name
 
 start_date = date(2024, 2, 16)
-end_date = date(2024, 2, 16)
+end_date = date(2024, 2, 21)
 
 # Create a list containing all dates in-between
 dates_list = calculate_dates(start_date, end_date)
@@ -15,7 +15,7 @@ for date in dates_list:
 nightly_runs = filter_workflow_runs_by_name(all_runs, "Nightly CI")
 
 for run in nightly_runs:
-    string_cache_hit = get_cache_hit(run['id'])   
-    row = f"Name:{run['name']}, RunID: {run['id']}, Commit:{run['head_sha']}, CreatedAt:{run['created_at']}, CacheHit:{string_cache_hit}"
+    hit_and_total_time = get_cache_hit_and_total_time(run['id'])   
+    row = f"Name:{run['name']}, RunID: {run['id']}, Commit:{run['head_sha']}, CreatedAt:{run['created_at']}, Duration:{hit_and_total_time[1]}, CacheHit:{hit_and_total_time[0]}"
     print(row)
 

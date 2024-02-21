@@ -1,11 +1,12 @@
 import datetime
+import json
 import requests
 from zipfile import ZipFile
 from io import BytesIO
 from datetime import timedelta
 
 headers = {
-        "Authorization": f"Bearer <your github dev token>",
+        "Authorization": f"Bearer <your dev token>",
         "Accept": "application/vnd.github+json"
 }
 
@@ -39,7 +40,7 @@ def filter_workflow_runs_by_name_and_conclusion(workflow_runs, target_name, conc
 def filter_workflow_runs_by_name(workflow_runs, target_name):
     return [run for run in workflow_runs if run["name"] == target_name]
 
-def get_cache_hit(run_id):
+def get_cache_hit_and_total_time(run_id):
     url = f"https://api.github.com/repos/celonis/cpm-query-engine/actions/runs/{run_id}/logs"
 
     response = requests.get(url, headers=headers)
@@ -48,13 +49,18 @@ def get_cache_hit(run_id):
     zipUrl = response.url
     content = requests.get(zipUrl)
 
+    hit_and_total_time = []
     with ZipFile(BytesIO(content.content)) as zip_file:
       try:
         txt_filename = '0_sonarcloud.txt'  
         with zip_file.open(txt_filename) as txt_file:
             for line in txt_file.readlines():
                 if b"[INFO] Cache:" in line:
-                    return {line.decode('utf-8').strip().split("Cache: ")[1].split(',')[0]}
+                    hit_and_total_time.append(line.decode('utf-8').strip().split("Cache: ")[1].split(',')[0])
+                if b"[INFO] Analysis total time:" in line:
+                    hit_and_total_time.append(line.decode('utf-8').strip().split("[INFO] Analysis total time: ")[1].split('.')[0]) # 2024-02-21T04:50:26.0778781Z [INFO] Analysis total time: 1:43:06.595 s -> 1:43:06 
+                if len(hit_and_total_time) == 2:
+                    return hit_and_total_time
       except KeyError as e:
         print("ERROR getting sonar log for Run " + str(run_id) + ":" + str(e))
         return "NA"
