@@ -17,6 +17,6 @@ print(str(len(nightly_runs)) + " Nightly runs found.")
 
 for run in nightly_runs:
     hit_and_total_time = get_cache_hit_and_total_time(run['id'])   
-    row = f"RunID: {run['id']}, Commit:{run['head_sha']}, CreatedAt:{run['created_at']}, Duration:{hit_and_total_time[1]}, CacheHit:{hit_and_total_time[0]}"
+    row = f"RunID: {run['id']}, Commit:{run['head_sha']}, CreatedAt:{run['created_at']}, Duration:{hit_and_total_time[0]}, CacheHit:{hit_and_total_time[1]}"
     print(row)
 

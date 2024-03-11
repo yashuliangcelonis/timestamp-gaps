@@ -24,7 +24,7 @@ for run in pr_runs:
         hit_and_total_time = []
         hit_and_total_time.append("NA")
         hit_and_total_time.append("NA")
-    print(f"RunID:{run['id']}, Commit:{run['head_sha']}, CreatedAt:{run['created_at']}, RunAt:{run['run_started_at']}, Sonar:{hit_and_total_time[1]}, CacheHit:{hit_and_total_time[0]}")
+    print(f"RunID:{run['id']}, Commit:{run['head_sha']}, CreatedAt:{run['created_at']}, RunAt:{run['run_started_at']}, Sonar:{hit_and_total_time[0]}, CacheHit:{hit_and_total_time[1]}")
 
 end_time = time.time()
 total_runtime = end_time - start_time
