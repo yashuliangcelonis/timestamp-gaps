@@ -54,7 +54,7 @@ def get_cache_hit_and_total_time(run_id):
       try:
         txt_filename = '0_sonarcloud.txt'  
         with zip_file.open(txt_filename) as txt_file:
-            for line in txt_file.readlines():
+            for line in reversed(txt_file.readlines()):
                 if b"[INFO] Cache:" in line:
                     hit_and_total_time.append(line.decode('utf-8').strip().split("Cache: ")[1].split(',')[0])
                 if b"[INFO] Analysis total time:" in line:
