@@ -1,0 +1,17 @@
+name: test
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+        - main
+    #   - main
+    #   - release-[0-9]+.[0-9]+
+
+jobs:
+  print_context:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+        - name: test
+          run: echo "test"
