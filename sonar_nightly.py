@@ -1,8 +1,8 @@
 from datetime import date
 from sonar_util import calculate_dates, get_cache_hit_and_total_time, get_workflow_runs, filter_workflow_runs_by_name
 
-start_date = date(2024, 3, 7)
-end_date = date(2024, 3, 8)
+start_date = date(2024, 3, 17)
+end_date = date(2024, 3, 18)
 
 # Create a list containing all dates in-between
 dates_list = calculate_dates(start_date, end_date)

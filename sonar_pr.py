@@ -4,8 +4,8 @@ import time
 
 start_time = time.time()
 
-start_date = date(2024, 3, 8)
-end_date = date(2024, 3, 11)
+start_date = date(2024, 3, 16)
+end_date = date(2024, 3, 18)
 
 # Create a list containing all dates in-between
 dates_list = calculate_dates(start_date, end_date)
@@ -24,7 +24,8 @@ for run in pr_runs:
         hit_and_total_time = []
         hit_and_total_time.append("NA")
         hit_and_total_time.append("NA")
-    print(f"RunID:{run['id']}, Commit:{run['head_sha']}, CreatedAt:{run['created_at']}, RunAt:{run['run_started_at']}, Sonar:{hit_and_total_time[0]}, CacheHit:{hit_and_total_time[1]}")
+
+    print(f"RunID:{run['id']}, Commit:{run['head_sha']}, RunAt:{run['run_started_at']}, Sonar:{hit_and_total_time[0]}, CacheHit:{hit_and_total_time[1]}")
 
 end_time = time.time()
 total_runtime = end_time - start_time
