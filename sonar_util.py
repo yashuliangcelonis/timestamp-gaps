@@ -6,7 +6,7 @@ from io import BytesIO
 from datetime import timedelta
 
 headers = {
-        "Authorization": f"Bearer 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",
+        "Authorization": f"Bearer <token>",
         "Accept": "application/vnd.github+json"
 }
 
