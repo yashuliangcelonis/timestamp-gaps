@@ -18,6 +18,5 @@ jobs:
         with:
           lfs: true
           fetch-depth: 0 # get full history
-          ref: ${{ github.event.pull_request.head.ref }}
       - name: print
         run: echo "pr is merged"
