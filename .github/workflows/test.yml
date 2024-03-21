@@ -1,4 +1,4 @@
-name: test
+name: PR merged
 
 on:
   pull_request:
@@ -13,5 +13,10 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-        - name: test
-          run: echo "test"
+      - name: checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+          fetch-depth: 0 # get full history
+      - name: print
+        run: echo "pr is merged"
