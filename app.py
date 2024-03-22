@@ -13,7 +13,7 @@ from datetime import datetime
 
 old_time = datetime(1970, 1, 1)
 
-with open('after.txt', 'r') as file:
+with open('slow-build', 'r') as file:
    
     for line in file:
         # Strip the newline character from the line
@@ -26,7 +26,7 @@ with open('after.txt', 'r') as file:
           pass
 
         diff_in_seconds = (new_time - old_time).total_seconds()
-        if  diff_in_seconds > 600:
+        if  diff_in_seconds > 300:
           print(new_time)
 
         old_time = new_time
