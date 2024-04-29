@@ -6,7 +6,7 @@ from io import BytesIO
 from datetime import timedelta
 
 headers = {
-        "Authorization": "<your github token>",
+        "Authorization": f"Bearer <your github personal access token>",
         "Accept": "application/vnd.github+json"
 }
 
@@ -25,7 +25,7 @@ def get_workflow_runs(date):
     todays_runs = []
     page = 1
     while True:
-        print("date/page: "+ str(date) + "/"+ str(page))
+        # print("date/page: "+ str(date) + "/"+ str(page))
         response = requests.get(url, headers=headers, params={"page": page, "per_page": 100, "status": "completed", "created": {date}})
         runs = response.json().get("workflow_runs", [])
         if not runs:
