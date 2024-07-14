@@ -4,9 +4,10 @@ import requests
 from zipfile import ZipFile
 from io import BytesIO
 from datetime import timedelta
+import statistics
 
 headers = {
-        "Authorization": f"Bearer <your github personal access token>",
+        "Authorization": f"Bearer <your token>",
         "Accept": "application/vnd.github+json"
 }
 
@@ -17,6 +18,53 @@ def calculate_duration(start, end):
     start = datetime.datetime.strptime(start, '%Y-%m-%dT%H:%M:%SZ')
     end = datetime.datetime.strptime(end, '%Y-%m-%dT%H:%M:%SZ')
     return str(round((end - start).total_seconds() / 3600, 2))
+
+
+def get_prs(start_date, end_date):
+
+    url = f'https://api.github.com/repos/celonis/cpm-query-engine/pulls'
+
+    params = {
+        'state': 'closed',
+        'base': 'main',
+        'sort': 'updated',
+        'direction': 'desc',
+        'per_page': 100,
+    }
+
+    query = f'is:pr is:merged created>=2024-01-01 created<=2024-01-31'
+    params['q'] = query
+    
+    all_prs = []
+    page = 1
+    while True:
+        # params['page'] = page
+        # response = requests.get(url, headers=headers, params=params)
+        response = requests.get(url, headers=headers, params={"page": page, "per_page": 100, "status": "completed", "created": "2024-01-01"})
+        response.raise_for_status()  # Raises an exception for HTTP errors
+        prs = response.json()
+
+        if not prs:
+            break
+
+        all_prs.extend(prs)
+
+        if 'next' not in response.links:
+            break
+
+        page += 1
+
+    return all_prs
+
+def calculate_pr_lifecycle(prs):
+    lifecycles = []
+    for pr in prs:
+        created_at = datetime.strptime(pr['created_at'], '%Y-%m-%dT%H:%M:%SZ')
+        merged_at = datetime.strptime(pr['merged_at'], '%Y-%m-%dT%H:%M:%SZ')
+        lifecycle = (merged_at - created_at).total_seconds() / 3600  # in hours
+        lifecycles.append(lifecycle)
+    
+    return statistics.mean(lifecycles) if lifecycles else 0
 
 
 def get_workflow_runs(date):
