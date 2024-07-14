@@ -15,18 +15,6 @@ headers = {
 }
 
 def get_prs(start_date, end_date):
-    params = {
-        # 'state': 'closed',
-        # 'base': 'main',
-        # 'sort': 'updated',
-        # 'direction': 'desc',
-        # 'per_page': 100,
-    }
-
-    # query = f'is:pr is:merged merged:>={start_date} merged:<={end_date}'
-    # query = f'is:pr is:merged created:2022-03-12T02:31:43Z'
-    # query = f'is:pr created:2024-01-01..2024-01-31 base:main is:merged'
-    # query = f'is:pr+created:2024-01-02+base:main+is:merged'
     query = f'repo:celonis/cpm-query-engine+type:pr+created:2024-01-01..2024-01-31+is:merged+base:main+-author:dependabot[bot]'
 
     all_prs = []
