@@ -15,7 +15,7 @@ headers = {
 }
 
 def get_prs(start_date, end_date):
-    query = f'repo:celonis/cpm-query-engine+type:pr+created:2024-01-01..2024-01-31+is:merged+base:main+-author:dependabot[bot]'
+    query = f'repo:celonis/cpm-query-engine+type:pr+created:2024-06-01..2024-06-30+is:merged+base:main+-author:dependabot[bot]'
 
     all_prs = []
     page = 1
@@ -39,6 +39,8 @@ def get_prs(start_date, end_date):
 
 def calculate_pr_lifecycle(prs):
     lifecycles = []
+    line_of_changes = 0
+    changed_files = 0
     for pr in prs:
         created_at = datetime.strptime(pr['created_at'], '%Y-%m-%dT%H:%M:%SZ')
         merged_at = datetime.strptime(pr['closed_at'], '%Y-%m-%dT%H:%M:%SZ')
@@ -46,11 +48,29 @@ def calculate_pr_lifecycle(prs):
         lifecycles.append(lifecycle)
         # print(f"pr {pr['number']} took {lifecycle:.2f} hours to merge")
 
+        #get changed lines
+        url = f"https://api.github.com/repos/celonis/cpm-query-engine/pulls/{pr['number']}"
+        response = requests.get(url, headers=headers)
+        pr_data = response.json()
+        pr_line_of_changes = pr_data['additions'] + pr_data['deletions']
+        line_of_changes += pr_line_of_changes
+        changed_files += pr_data['changed_files']
+
+        print(f"PR {pr['number']}: files changed: {pr_data['changed_files']} lines changed: {pr_line_of_changes}")
+
+
     print(f"Number of PRs analyzed: {len(prs)}")
     avg_lifecycle = statistics.mean(lifecycles) if lifecycles else 0
     percentile_90 = np.percentile(lifecycles, 90)
     print(f"Average PR lifecycle: {avg_lifecycle:.0f} hours")
     print(f"90 Percentile PR lifecycle: {percentile_90:.0f} hours")
+
+    number_of_prs = len(prs);
+    average_changed_files = changed_files/number_of_prs;
+    average_changed_lines = line_of_changes/number_of_prs;
+    print(f"Average files changed: {average_changed_files}")
+    print(f"Average lines changed: {average_changed_lines}")
+
 
 
 # Example usage
